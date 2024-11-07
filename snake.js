@@ -1,19 +1,19 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-let scale = 50; 
-let rows, columns; 
+let scale = 50;
+let rows, columns;
 let snake;
 let apple;
 let score;
 let gameOver = false;
-let paused = false; 
+let paused = false;
 
 const snakeImage = new Image();
 snakeImage.src = 'snake.png';
 
 const appleImage = new Image();
-appleImage.src = 'apple.png';  
+appleImage.src = 'apple.png';
 
 class Snake {
     constructor() {
@@ -35,12 +35,16 @@ class Snake {
         switch (this.dir) {
             case 'up':
                 head.y -= 1;
+                break;
             case 'down':
                 head.y += 1;
+                break;
             case 'left':
                 head.x -= 1;
+                break;
             case 'right':
                 head.x += 1;
+                break;
         }
 
         this.body.unshift(head);
@@ -67,7 +71,6 @@ class Snake {
     }
 }
 
-
 function setApple() {
     const x = Math.floor(Math.random() * columns);
     const y = Math.floor(Math.random() * rows);
@@ -84,7 +87,7 @@ function resizeGame() {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     if (paused) {
         ctx.fillStyle = 'white';
         ctx.font = '25px Arial';
@@ -112,7 +115,7 @@ function draw() {
     ctx.fillText(`Score: ${score}`, 10, 30);
 
     if (gameOver) {
-         ctx.fillStyle = 'white';
+        ctx.fillStyle = 'white';
         ctx.font = '25px Arial';
         ctx.fillText('Game Over! Press "R" to Restart.', 15 , canvas.height / 2);
     }
@@ -127,7 +130,7 @@ function getTailDirection(prevSegment, segment) {
 
 function newTail(x, y, direction) {
     ctx.beginPath();
-    
+
     switch (direction) {
         case 'up':
             ctx.moveTo(x * scale + scale / 2, y * scale); 
@@ -150,18 +153,18 @@ function newTail(x, y, direction) {
             ctx.lineTo(x * scale, y * scale + scale);            
             break;
     }
-    
+
     ctx.closePath();
     ctx.fillStyle = '#75b74c'; 
     ctx.fill();
 }
 
 function update() {
-    if (gameOver || paused) return; 
+    if (gameOver || paused) return;
 
     const head = { ...snake.body[0] };
 
-    switch (snake.direction) {
+    switch (snake.dir) {
         case 'up':
             head.y -= 1;
             break;
@@ -212,17 +215,41 @@ document.addEventListener('keydown', (e) => {
 
     switch (e.key) {
         case 'ArrowUp':
-            if (snake.direction !== 'down') snake.direction = 'up';
+            if (snake.dir !== 'down') snake.dir = 'up';
             break;
         case 'ArrowDown':
-            if (snake.direction !== 'up') snake.direction = 'down';
+            if (snake.dir !== 'up') snake.dir = 'down';
             break;
         case 'ArrowLeft':
-            if (snake.direction !== 'right') snake.direction = 'left';
+            if (snake.dir !== 'right') snake.dir = 'left';
             break;
         case 'ArrowRight':
-            if (snake.direction !== 'left') snake.direction = 'right';
+            if (snake.dir !== 'left') snake.dir = 'right';
             break;
+    }
+});
+
+document.getElementById('up').addEventListener('click', () => {
+    if (snake.dir !== 'down') snake.dir = 'up';
+});
+
+document.getElementById('down').addEventListener('click', () => {
+    if (snake.dir !== 'up') snake.dir = 'down';
+});
+
+document.getElementById('left').addEventListener('click', () => {
+    if (snake.dir !== 'right') snake.dir = 'left';
+});
+
+document.getElementById('right').addEventListener('click', () => {
+    if (snake.dir !== 'left') snake.dir = 'right';
+});
+
+document.getElementById('pause').addEventListener('click', () => {
+    paused = !paused;
+    if (gameOver) {
+        resetGame();
+        return;
     }
 });
 
@@ -230,7 +257,7 @@ function resetGame() {
     snake = new Snake();
     score = 0;
     gameOver = false;
-    paused = false; 
+    paused = false;
     setApple();
 }
 
@@ -242,7 +269,7 @@ function init() {
     setInterval(() => {
         update();
         draw();
-    }, 120); 
+    }, 120);
 }
 
 window.addEventListener('resize', resizeGame);

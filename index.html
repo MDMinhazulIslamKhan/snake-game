@@ -13,10 +13,44 @@
         height: 100%;
         background-color: black;
       }
+      #controls {
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .control-btn {
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 10px;
+        margin: 5px;
+        font-size: 20px;
+        border: none;
+        border-radius: 10px;
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+      }
+
+      .control-btn:active {
+        background-color: rgba(255, 255, 255, 0.5);
+      }
     </style>
   </head>
   <body>
     <canvas id="gameCanvas"></canvas>
+    <div id="controls">
+      <button id="up" class="control-btn">↑</button>
+      <div>
+        <button id="left" class="control-btn">←</button>
+        <button id="right" class="control-btn">→</button>
+      </div>
+      <button id="down" class="control-btn">↓</button>
+      <button id="pause" class="control-btn">Pause</button>
+    </div>
     <script src="snake.js"></script>
   </body>
 </html>
